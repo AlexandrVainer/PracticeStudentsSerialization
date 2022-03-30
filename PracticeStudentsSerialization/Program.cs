@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 
@@ -41,7 +41,16 @@ namespace PracticeStudentsSerialization
         }
         static List<Student> Deserialize()
         {
-            string jsonString = File.ReadAllText(nameFile);
+            string jsonString = "";
+            try
+            {
+                jsonString = File.ReadAllText(nameFile);
+            }
+            catch (Exception ex)
+            {
+                File.WriteAllText(nameFile, "");
+                return new List<Student>();
+            }
             List<Student>? students = JsonSerializer.Deserialize<List<Student>>(jsonString);
             return students;
         }
@@ -77,7 +86,7 @@ namespace PracticeStudentsSerialization
             foreach (var student in students)
                 if (student.Id == id)
                 {
-                    students.Remove(student);  
+                    students.Remove(student);
                     break;
                 }
             Serialize(students);
@@ -98,9 +107,10 @@ namespace PracticeStudentsSerialization
 
         static void FeeReport(List<Student> students)
         {
-            foreach (var student in students) {
-                var FinalFee = student.Age < underAge ?fee/100*(100- discount): fee;
-                 Console.WriteLine($"{student} need to pay {FinalFee}");
+            foreach (var student in students)
+            {
+                var FinalFee = student.Age < underAge ? fee / 100 * (100 - discount) : fee;
+                Console.WriteLine($"{student} need to pay {FinalFee}");
             }
         }
 
